@@ -7,11 +7,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 
 class SecondScreen extends StatefulWidget {
   @override
-  State<SecondScreen> createState() => SecondScreenState();
+  State<SecondScreen> createState() => _SecondScreenState();
 }
 
-class SecondScreenState extends State<SecondScreen> {
-  //stores:---------------------------------------------------------------------
+class _SecondScreenState extends State<SecondScreen> {
   final ThemeStore _themeStore = getIt<ThemeStore>();
   final UserStore _userStore = getIt<UserStore>();
 
@@ -23,59 +22,13 @@ class SecondScreenState extends State<SecondScreen> {
     );
   }
 
-  // body methods:--------------------------------------------------------------
   Widget _buildBody() {
     return Stack(
       children: <Widget>[
-        Container(
-          height: 1,
-          color: Colors.grey,
-        ),
+        _buildDivider(),
         Column(
           children: <Widget>[
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(
-                      "Welcome",
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                    ),
-                    Text(
-                      _userStore.userLogin != null
-                          ? "${_userStore.userLogin?.firstName}"
-                          : "Name not found",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    // expanded widget is used to take the remaining space
-                    Expanded(child: Container()),
-                    Center(
-                      child: Text(
-                        _userStore.userList != null
-                            ? "${_userStore.userSelected?.firstName} ${_userStore.userSelected?.lastName}"
-                            : "Selected User Name",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Expanded(child: Container()),
-                  ],
-                ),
-              ),
-            ),
-            // The button is placed at the bottom here
+            _buildUserInfoSection(),
             _buildChooseUserButton(),
           ],
         ),
@@ -83,19 +36,90 @@ class SecondScreenState extends State<SecondScreen> {
     );
   }
 
+  Widget _buildDivider() {
+    return Container(
+      height: 1,
+      color: Colors.grey,
+    );
+  }
+
+  Widget _buildUserInfoSection() {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _buildWelcomeText(),
+            _buildUserNameText(),
+            Expanded(child: Container()),
+            _buildSelectedUserSection(),
+            Expanded(child: Container()),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWelcomeText() {
+    return Text(
+      "Welcome",
+      style: TextStyle(fontSize: 20),
+    );
+  }
+
+  Widget _buildUserNameText() {
+    return Text(
+      _userStore.userLogin != null
+          ? "${_userStore.userLogin?.firstName}"
+          : "Name not found",
+      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    );
+  }
+
+  Widget _buildSelectedUserSection() {
+    if (_userStore.userSelected != null) {
+      return Center(
+        child: Column(
+          children: [
+            CircleAvatar(
+              radius: 50,
+              backgroundImage: NetworkImage(_userStore.userSelected!.avatar ?? ''),
+            ),
+            SizedBox(height: 16.0),
+            Text(
+              "${_userStore.userSelected?.firstName} ${_userStore.userSelected?.lastName}",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8.0),
+            Text(
+              _userStore.userSelected?.email ?? "Email not found",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Center(
+        child: Text(
+          "Selected User Name",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+      );
+    }
+  }
+
   Widget _buildChooseUserButton() {
     return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 10,
-      ),
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: Color.fromRGBO(58, 97, 121, 1),
-          padding: EdgeInsets.symmetric(
-            vertical: 15,
-          ),
+          padding: EdgeInsets.symmetric(vertical: 15),
         ),
         onPressed: () {
           Navigator.of(context).push(
@@ -112,25 +136,21 @@ class SecondScreenState extends State<SecondScreen> {
         },
         child: Text(
           "Choose a User",
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.white,
-          ),
+          style: TextStyle(fontSize: 18, color: Colors.white),
         ),
       ),
     );
   }
 
-  // app bar methods:-----------------------------------------------------------
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       title: Text("Second Screen"),
       centerTitle: true,
-      actions: _buildActions(context),
+      actions: _buildActions(),
     );
   }
 
-  List<Widget> _buildActions(BuildContext context) {
+  List<Widget> _buildActions() {
     return <Widget>[
       _buildThemeButton(),
     ];
