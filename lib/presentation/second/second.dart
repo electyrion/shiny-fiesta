@@ -1,5 +1,5 @@
 import 'package:boilerplate/di/service_locator.dart';
-import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
+import 'package:boilerplate/presentation/first/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/user/store/user_store.dart';
 import 'package:boilerplate/presentation/user/user_list.dart';
 import 'package:flutter/material.dart';

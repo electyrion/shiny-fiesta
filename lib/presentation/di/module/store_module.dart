@@ -4,8 +4,8 @@ import 'package:boilerplate/core/stores/error/error_store.dart';
 import 'package:boilerplate/core/stores/form/form_store.dart';
 import 'package:boilerplate/domain/repository/setting/setting_repository.dart';
 import 'package:boilerplate/domain/usecase/user/get_user_usecase.dart';
-import 'package:boilerplate/presentation/home/store/language/language_store.dart';
-import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
+import 'package:boilerplate/presentation/first/store/language/language_store.dart';
+import 'package:boilerplate/presentation/first/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/user/store/user_store.dart';
 
 import '../../../di/service_locator.dart';
