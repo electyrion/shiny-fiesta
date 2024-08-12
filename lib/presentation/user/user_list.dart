@@ -57,6 +57,10 @@ class _UserListScreenState extends State<UserListScreen> {
   Widget _buildBody() {
     return Stack(
       children: <Widget>[
+        Container(
+          height: 1,
+          color: Colors.grey,
+        ),
         _handleErrorMessage(),
         _buildMainContent(),
       ],

@@ -27,6 +27,10 @@ class SecondScreenState extends State<SecondScreen> {
   Widget _buildBody() {
     return Stack(
       children: <Widget>[
+        Container(
+          height: 1,
+          color: Colors.grey,
+        ),
         Column(
           children: <Widget>[
             Expanded(
@@ -57,8 +61,8 @@ class SecondScreenState extends State<SecondScreen> {
                     Center(
                       child: Text(
                         _userStore.userList != null
-                            ? "Selected User: ${_userStore.userSelected?.firstName} ${_userStore.userSelected?.lastName}"
-                            : "User Selected: None",
+                            ? "${_userStore.userSelected?.firstName} ${_userStore.userSelected?.lastName}"
+                            : "Selected User Name",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 20,
@@ -121,6 +125,7 @@ class SecondScreenState extends State<SecondScreen> {
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       title: Text("Second Screen"),
+      centerTitle: true,
       actions: _buildActions(context),
     );
   }

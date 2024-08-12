@@ -74,17 +74,6 @@ class ThirdScreenState extends State<ThirdScreen> {
     );
   }
 
-  // Widget _buildLanguageButton() {
-  //   return IconButton(
-  //     onPressed: () {
-  //       _buildLanguageDialog();
-  //     },
-  //     icon: Icon(
-  //       Icons.language,
-  //     ),
-  //   );
-  // }
-
   Widget _buildLanguageButton() {
     return IconButton(
       onPressed: () {
@@ -98,15 +87,6 @@ class ThirdScreenState extends State<ThirdScreen> {
     Dialogs.materialDialog(
       context: context,
       title: AppLocalizations.of(context).translate('home_tv_choose_language'),
-      // borderRadius: BorderRadius.circular(5.0),
-      // title: Text(
-      //   AppLocalizations.of(context).translate('home_tv_choose_language'),
-      //   style: const TextStyle(
-      //     color: Colors.white,
-      //     fontSize: 16.0,
-      //   ),
-      // ),
-      // headerColor: Theme.of(context).primaryColor,
       color: Theme.of(context).scaffoldBackgroundColor,
       customView: Column(
         mainAxisSize: MainAxisSize.min,
@@ -146,15 +126,6 @@ class ThirdScreenState extends State<ThirdScreen> {
     );
   }
 
-  // void _showDialog<T>({required BuildContext context, required Widget child}) {
-  //   showDialog<T>(
-  //     context: context,
-  //     builder: (BuildContext context) => child,
-  //   ).then<void>((T? value) {
-  //     // The value passed to Navigator.pop() or null.
-  //   });
-  // }
-
   Widget navigate(BuildContext context) {
     SharedPreferences.getInstance().then((prefs) {
       // prefs.setBool(Preferences.isLoggedIn, false);
@@ -166,62 +137,5 @@ class ThirdScreenState extends State<ThirdScreen> {
     });
 
     return Container();
-  }
-
-  // _buildLanguageDialog() {
-  //   _showDialog<String>(
-  //     context: context,
-  //     child: MaterialDialog(
-  //       borderRadius: 5.0,
-  //       enableFullWidth: true,
-  //       title: Text(
-  //         AppLocalizations.of(context).translate('home_tv_choose_language'),
-  //         style: TextStyle(
-  //           color: Colors.white,
-  //           fontSize: 16.0,
-  //         ),
-  //       ),
-  //       headerColor: Theme.of(context).primaryColor,
-  //       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-  //       closeButtonColor: Colors.white,
-  //       enableCloseButton: true,
-  //       enableBackButton: false,
-  //       onCloseButtonClicked: () {
-  //         Navigator.of(context).pop();
-  //       },
-  //       children: _languageStore.supportedLanguages
-  //           .map(
-  //             (object) => ListTile(
-  //               dense: true,
-  //               contentPadding: EdgeInsets.all(0.0),
-  //               title: Text(
-  //                 object.language!,
-  //                 style: TextStyle(
-  //                   color: _languageStore.locale == object.locale
-  //                       ? Theme.of(context).primaryColor
-  //                       : _themeStore.darkMode
-  //                           ? Colors.white
-  //                           : Colors.black,
-  //                 ),
-  //               ),
-  //               onTap: () {
-  //                 Navigator.of(context).pop();
-  //                 // change user language based on selected locale
-  //                 _languageStore.changeLanguage(object.locale!);
-  //               },
-  //             ),
-  //           )
-  //           .toList(),
-  //     ),
-  //   );
-  // }
-
-  _showDialog<T>({required BuildContext context, required Widget child}) {
-    showDialog<T>(
-      context: context,
-      builder: (BuildContext context) => child,
-    ).then<void>((T? value) {
-      // The value passed to Navigator.pop() or null.
-    });
   }
 }

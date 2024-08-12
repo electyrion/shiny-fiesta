@@ -134,9 +134,12 @@ class _FirstScreenState extends State<FirstScreen> {
         style: TextStyle(color: Colors.white),
       ),
       onPressed: () {
-        // Implement next button logic here
-        _userStore.userLogin = User(firstName: _nameController.text);
-        Navigator.of(context).pushNamed(Routes.second);
+        if (_nameController.text.isEmpty) {
+          _showEmptyNameDialog(context);
+        } else {
+          _userStore.userLogin = User(firstName: _nameController.text);
+          Navigator.of(context).pushNamed(Routes.second);
+        }
       },
     );
   }
@@ -158,11 +161,35 @@ class _FirstScreenState extends State<FirstScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Palindrome Check"),
-          content: Text(message,
-              style: TextStyle(
-                  color: message == "This is a palindrome!"
-                      ? Colors.green
-                      : Colors.red)),
+          content: Text(
+            message,
+            style: TextStyle(
+              color: result ? Colors.green : Colors.red,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text("OK", style: TextStyle(color: Colors.blueGrey)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showEmptyNameDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Name Required"),
+          content: Text(
+            "Please enter your name before proceeding.",
+            style: TextStyle(color: Colors.red),
+          ),
           actions: <Widget>[
             TextButton(
               child: Text("OK", style: TextStyle(color: Colors.blueGrey)),
