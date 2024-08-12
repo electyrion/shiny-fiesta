@@ -20,11 +20,24 @@ class _UserListScreenState extends State<UserListScreen> {
   // stores:---------------------------------------------------------------------
   final UserStore _userStore = getIt<UserStore>();
 
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        _userStore.loadNextPage();
+      }
+    });
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    // check to see if already called api
     if (!_userStore.loading) {
       _userStore.getUsers();
     }
@@ -32,7 +45,12 @@ class _UserListScreenState extends State<UserListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildBody();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Third Screen"),
+      ),
+      body: _buildBody(),
+    );
   }
 
   // body methods:--------------------------------------------------------------
@@ -48,29 +66,33 @@ class _UserListScreenState extends State<UserListScreen> {
   Widget _buildMainContent() {
     return Observer(
       builder: (context) {
-        return _userStore.loading
+        return _userStore.loading && _userStore.userList == null
             ? CustomProgressIndicatorWidget()
-            : Material(child: _buildListView());
+            : _userStore.isUserListEmpty
+                ? _buildEmptyState()
+                : _buildListView();
       },
     );
   }
 
   Widget _buildListView() {
-    return _userStore.userList != null
-        ? ListView.separated(
-            itemCount: _userStore.userList!.users!.length,
-            separatorBuilder: (context, position) {
-              return Divider();
-            },
-            itemBuilder: (context, position) {
-              return _buildListItem(position);
-            },
-          )
-        : Center(
-            child: Text(
-              AppLocalizations.of(context).translate('home_tv_no_post_found'),
-            ),
-          );
+    return RefreshIndicator(
+      onRefresh: _userStore.refreshUsers,
+      child: ListView.separated(
+        controller: _scrollController,
+        itemCount: _userStore.userList!.users!.length + 1,
+        separatorBuilder: (context, position) {
+          return Divider();
+        },
+        itemBuilder: (context, position) {
+          if (position == _userStore.userList!.users!.length) {
+            return _buildProgressIndicator();
+          } else {
+            return _buildListItem(position);
+          }
+        },
+      ),
+    );
   }
 
   Widget _buildListItem(int position) {
@@ -96,10 +118,32 @@ class _UserListScreenState extends State<UserListScreen> {
         softWrap: false,
       ),
       onTap: () {
-        // set the current user in the UserStore
         widget.onUserSelected(_userStore.userList?.users![position]);
         Navigator.of(context).pop();
       },
+    );
+  }
+
+  Widget _buildProgressIndicator() {
+    return Observer(
+      builder: (context) {
+        return _userStore.loading
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : SizedBox.shrink();
+      },
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Text(
+        AppLocalizations.of(context).translate('home_tv_no_post_found'),
+      ),
     );
   }
 

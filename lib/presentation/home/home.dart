@@ -13,7 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _palindromeController = TextEditingController();
 
-  final UserStore _userStore = getIt<UserStore>(); 
+  final UserStore _userStore = getIt<UserStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -142,24 +142,30 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   bool isPalindrome(String text) {
-    String cleanedText = text.replaceAll(RegExp(r'[^A-Za-z0-9]'), '').toLowerCase();
+    String cleanedText =
+        text.replaceAll(RegExp(r'[^A-Za-z0-9]'), '').toLowerCase();
     String reversedText = cleanedText.split('').reversed.join('');
-    return cleanedText == '' ? false : cleanedText == reversedText;
+    return cleanedText == reversedText;
   }
 
   void _showPalindromeResult(BuildContext context) {
     bool result = isPalindrome(_palindromeController.text);
-    String message = result ? "This is a palindrome!" : "This is not a palindrome.";
+    String message =
+        result ? "This is a palindrome!" : "This is not a palindrome.";
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Palindrome Check"),
-          content: Text(message),
+          content: Text(message,
+              style: TextStyle(
+                  color: message == "This is a palindrome!"
+                      ? Colors.green
+                      : Colors.red)),
           actions: <Widget>[
             TextButton(
-              child: Text("OK"),
+              child: Text("OK", style: TextStyle(color: Colors.blueGrey)),
               onPressed: () {
                 Navigator.of(context).pop();
               },

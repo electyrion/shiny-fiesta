@@ -111,12 +111,45 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$currentPageAtom =
+      Atom(name: '_UserStore.currentPage', context: context);
+
+  @override
+  int get currentPage {
+    _$currentPageAtom.reportRead();
+    return super.currentPage;
+  }
+
+  @override
+  set currentPage(int value) {
+    _$currentPageAtom.reportWrite(value, super.currentPage, () {
+      super.currentPage = value;
+    });
+  }
+
   late final _$getUsersAsyncAction =
       AsyncAction('_UserStore.getUsers', context: context);
 
   @override
-  Future<dynamic> getUsers() {
-    return _$getUsersAsyncAction.run(() => super.getUsers());
+  Future<dynamic> getUsers({bool isRefresh = false}) {
+    return _$getUsersAsyncAction
+        .run(() => super.getUsers(isRefresh: isRefresh));
+  }
+
+  late final _$loadNextPageAsyncAction =
+      AsyncAction('_UserStore.loadNextPage', context: context);
+
+  @override
+  Future<dynamic> loadNextPage() {
+    return _$loadNextPageAsyncAction.run(() => super.loadNextPage());
+  }
+
+  late final _$refreshUsersAsyncAction =
+      AsyncAction('_UserStore.refreshUsers', context: context);
+
+  @override
+  Future<dynamic> refreshUsers() {
+    return _$refreshUsersAsyncAction.run(() => super.refreshUsers());
   }
 
   @override
@@ -128,6 +161,7 @@ isUserListEmpty: ${isUserListEmpty},
 userLogin: ${userLogin},
 userSelected: ${userSelected},
 success: ${success},
+currentPage: ${currentPage},
 loading: ${loading}
     ''';
   }

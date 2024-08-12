@@ -33,36 +33,74 @@ class SecondScreenState extends State<SecondScreen> {
 
   // body methods:--------------------------------------------------------------
   Widget _buildBody() {
-    return Column(
+    return Stack(
       children: <Widget>[
-        Text(
-          _userStore.userLogin != null
-              ? "UserLogin ${_userStore.userLogin?.firstName}"
-              : "Logged User: None",
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Text(
-          _userStore.userList != null
-              ? "UserSelected: ${_userStore.userSelected?.firstName} ${_userStore.userSelected?.lastName}"
-              : "Selected User: None",
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Expanded(
-          child: _buildChooseUserButton(),
+        Column(
+          children: <Widget>[
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      "Welcome",
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                    Text(
+                      _userStore.userLogin != null
+                          ? "${_userStore.userLogin?.firstName}"
+                          : "Name not found",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    // expanded widget is used to take the remaining space
+                    Expanded(child: Container()),
+                    Center(
+                      child: Text(
+                        _userStore.userList != null
+                            ? "Selected User: ${_userStore.userSelected?.firstName} ${_userStore.userSelected?.lastName}"
+                            : "User Selected: None",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Expanded(child: Container()),
+                  ],
+                ),
+              ),
+            ),
+            // The button is placed at the bottom here
+            _buildChooseUserButton(),
+          ],
         ),
       ],
     );
   }
 
   Widget _buildChooseUserButton() {
-    return Center(
+    return Container(
+      margin: EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 10,
+      ),
+      width: double.infinity,
       child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Color.fromRGBO(58, 97, 121, 1),
+          padding: EdgeInsets.symmetric(
+            vertical: 15,
+          ),
+        ),
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -128,17 +166,6 @@ class SecondScreenState extends State<SecondScreen> {
     );
   }
 
-  // Widget _buildLanguageButton() {
-  //   return IconButton(
-  //     onPressed: () {
-  //       _buildLanguageDialog();
-  //     },
-  //     icon: Icon(
-  //       Icons.language,
-  //     ),
-  //   );
-  // }
-
   Widget _buildLanguageButton() {
     return IconButton(
       onPressed: () {
@@ -152,15 +179,6 @@ class SecondScreenState extends State<SecondScreen> {
     Dialogs.materialDialog(
       context: context,
       title: AppLocalizations.of(context).translate('home_tv_choose_language'),
-      // borderRadius: BorderRadius.circular(5.0),
-      // title: Text(
-      //   AppLocalizations.of(context).translate('home_tv_choose_language'),
-      //   style: const TextStyle(
-      //     color: Colors.white,
-      //     fontSize: 16.0,
-      //   ),
-      // ),
-      // headerColor: Theme.of(context).primaryColor,
       color: Theme.of(context).scaffoldBackgroundColor,
       customView: Column(
         mainAxisSize: MainAxisSize.min,
@@ -200,84 +218,5 @@ class SecondScreenState extends State<SecondScreen> {
         ),
       ],
     );
-  }
-
-  // void _showDialog<T>({required BuildContext context, required Widget child}) {
-  //   showDialog<T>(
-  //     context: context,
-  //     builder: (BuildContext context) => child,
-  //   ).then<void>((T? value) {
-  //     // The value passed to Navigator.pop() or null.
-  //   });
-  // }
-
-  Widget navigate(BuildContext context) {
-    SharedPreferences.getInstance().then((prefs) {
-      // prefs.setBool(Preferences.isLoggedIn, false);
-    });
-
-    Future.delayed(const Duration(milliseconds: 0), () {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          Routes.login, (Route<dynamic> route) => false);
-    });
-
-    return Container();
-  }
-
-  // _buildLanguageDialog() {
-  //   _showDialog<String>(
-  //     context: context,
-  //     child: MaterialDialog(
-  //       borderRadius: 5.0,
-  //       enableFullWidth: true,
-  //       title: Text(
-  //         AppLocalizations.of(context).translate('home_tv_choose_language'),
-  //         style: TextStyle(
-  //           color: Colors.white,
-  //           fontSize: 16.0,
-  //         ),
-  //       ),
-  //       headerColor: Theme.of(context).primaryColor,
-  //       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-  //       closeButtonColor: Colors.white,
-  //       enableCloseButton: true,
-  //       enableBackButton: false,
-  //       onCloseButtonClicked: () {
-  //         Navigator.of(context).pop();
-  //       },
-  //       children: _languageStore.supportedLanguages
-  //           .map(
-  //             (object) => ListTile(
-  //               dense: true,
-  //               contentPadding: EdgeInsets.all(0.0),
-  //               title: Text(
-  //                 object.language!,
-  //                 style: TextStyle(
-  //                   color: _languageStore.locale == object.locale
-  //                       ? Theme.of(context).primaryColor
-  //                       : _themeStore.darkMode
-  //                           ? Colors.white
-  //                           : Colors.black,
-  //                 ),
-  //               ),
-  //               onTap: () {
-  //                 Navigator.of(context).pop();
-  //                 // change user language based on selected locale
-  //                 _languageStore.changeLanguage(object.locale!);
-  //               },
-  //             ),
-  //           )
-  //           .toList(),
-  //     ),
-  //   );
-  // }
-
-  _showDialog<T>({required BuildContext context, required Widget child}) {
-    showDialog<T>(
-      context: context,
-      builder: (BuildContext context) => child,
-    ).then<void>((T? value) {
-      // The value passed to Navigator.pop() or null.
-    });
   }
 }

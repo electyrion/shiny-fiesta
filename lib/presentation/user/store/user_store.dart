@@ -18,7 +18,6 @@ abstract class _UserStore with Store {
   final GetUserUseCase _getUserUseCase;
 
   // stores:--------------------------------------------------------------------
-  // store for handling errors
   final ErrorStore errorStore;
 
   // store variables:-----------------------------------------------------------
@@ -44,19 +43,53 @@ abstract class _UserStore with Store {
   @observable
   bool success = false;
 
+  @observable
+  int currentPage = 1;
+
   @computed
   bool get loading => fetchUsersFuture.status == FutureStatus.pending;
 
-  // actions:-------------------------------------------------------------------
   @action
-  Future getUsers() async {
-    final future = _getUserUseCase.call(params: null);
+  Future getUsers({bool isRefresh = false}) async {
+    if (isRefresh) {
+      currentPage = 1;
+    }
+
+    GetUserUseCaseParams params = GetUserUseCaseParams(page: currentPage);
+    final future = _getUserUseCase.call(params: params);
     fetchUsersFuture = ObservableFuture(future);
 
     future.then((userList) {
-      this.userList = userList;
+      if (isRefresh) {
+        this.userList = userList;
+      } else {
+        if (this.userList != null) {
+          this.userList!.users!.addAll(userList.users!);
+        } else {
+          this.userList = userList;
+        }
+      }
+      if (this.userList!.users!.isEmpty) {
+        isUserListEmpty = true;
+      } else {
+        isUserListEmpty = false;
+      }
+      currentPage++;
     }).catchError((error) {
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
   }
+
+  @action
+  Future loadNextPage() async {
+    if (!loading) {
+      getUsers();
+    }
+  }
+
+  @action
+  Future refreshUsers() async {
+    await getUsers(isRefresh: true);
+  }
 }
+

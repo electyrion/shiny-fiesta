@@ -6,6 +6,7 @@ import 'package:boilerplate/data/network/apis/users/user_api.dart';
 import 'package:boilerplate/domain/entity/user/user.dart';
 import 'package:boilerplate/domain/entity/user/user_list.dart';
 import 'package:boilerplate/domain/repository/user/user_repository.dart';
+import 'package:boilerplate/domain/usecase/user/get_user_usecase.dart';
 import 'package:sembast/sembast.dart';
 
 class UserRepositoryImpl extends UserRepository {
@@ -20,13 +21,13 @@ class UserRepositoryImpl extends UserRepository {
 
   // Post: ---------------------------------------------------------------------
   @override
-  Future<UserList> getUsers() async {
+  Future<UserList> getUsers(GetUserUseCaseParams params) async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    return await _userApi.getPosts().then((usersList) {
-      usersList.users?.forEach((post) {
-        _userDataSource.insert(post);
+    return await _userApi.getUsers(params).then((usersList) {
+      usersList.users?.forEach((user) {
+        _userDataSource.insert(user);
       });
 
       return usersList;
