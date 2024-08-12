@@ -1,4 +1,4 @@
-package com.iotecksolutions.todoapp;
+package com.electyrion.boilerplate;
 
 import io.flutter.embedding.android.FlutterActivity;
 
