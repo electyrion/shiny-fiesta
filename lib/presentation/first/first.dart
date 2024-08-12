@@ -105,7 +105,7 @@ class _FirstScreenState extends State<FirstScreen> {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         padding: EdgeInsets.all(16.0),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Color.fromRGBO(58, 97, 121, 1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
@@ -124,7 +124,7 @@ class _FirstScreenState extends State<FirstScreen> {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         padding: EdgeInsets.all(16.0),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Color.fromRGBO(58, 97, 121, 1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
