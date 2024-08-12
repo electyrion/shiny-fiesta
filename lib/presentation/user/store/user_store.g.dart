@@ -48,6 +48,54 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$isUserListEmptyAtom =
+      Atom(name: '_UserStore.isUserListEmpty', context: context);
+
+  @override
+  bool get isUserListEmpty {
+    _$isUserListEmptyAtom.reportRead();
+    return super.isUserListEmpty;
+  }
+
+  @override
+  set isUserListEmpty(bool value) {
+    _$isUserListEmptyAtom.reportWrite(value, super.isUserListEmpty, () {
+      super.isUserListEmpty = value;
+    });
+  }
+
+  late final _$userLoginAtom =
+      Atom(name: '_UserStore.userLogin', context: context);
+
+  @override
+  User? get userLogin {
+    _$userLoginAtom.reportRead();
+    return super.userLogin;
+  }
+
+  @override
+  set userLogin(User? value) {
+    _$userLoginAtom.reportWrite(value, super.userLogin, () {
+      super.userLogin = value;
+    });
+  }
+
+  late final _$userSelectedAtom =
+      Atom(name: '_UserStore.userSelected', context: context);
+
+  @override
+  User? get userSelected {
+    _$userSelectedAtom.reportRead();
+    return super.userSelected;
+  }
+
+  @override
+  set userSelected(User? value) {
+    _$userSelectedAtom.reportWrite(value, super.userSelected, () {
+      super.userSelected = value;
+    });
+  }
+
   late final _$successAtom = Atom(name: '_UserStore.success', context: context);
 
   @override
@@ -76,6 +124,9 @@ mixin _$UserStore on _UserStore, Store {
     return '''
 fetchUsersFuture: ${fetchUsersFuture},
 userList: ${userList},
+isUserListEmpty: ${isUserListEmpty},
+userLogin: ${userLogin},
+userSelected: ${userSelected},
 success: ${success},
 loading: ${loading}
     ''';

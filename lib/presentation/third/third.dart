@@ -25,7 +25,7 @@ class ThirdScreenState extends State<ThirdScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      body: UserListScreen(),
+      body: UserListScreen(onUserSelected: (User) {  },),
     );
   }
 

@@ -1,18 +1,23 @@
 import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/domain/entity/user/user.dart';
 import 'package:boilerplate/presentation/user/store/user_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class UserListScreen extends StatefulWidget {
+  final Function(User?) onUserSelected;
+
+  UserListScreen({required this.onUserSelected});
+
   @override
   _UserListScreenState createState() => _UserListScreenState();
 }
 
 class _UserListScreenState extends State<UserListScreen> {
-  //stores:---------------------------------------------------------------------
+  // stores:---------------------------------------------------------------------
   final UserStore _userStore = getIt<UserStore>();
 
   @override
@@ -92,7 +97,7 @@ class _UserListScreenState extends State<UserListScreen> {
       ),
       onTap: () {
         // set the current user in the UserStore
-        _userStore.user = _userStore.userList?.users?[position];
+        widget.onUserSelected(_userStore.userList?.users![position]);
         Navigator.of(context).pop();
       },
     );

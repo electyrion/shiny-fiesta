@@ -2,6 +2,8 @@ import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/presentation/home/store/language/language_store.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
+import 'package:boilerplate/presentation/user/store/user_store.dart';
+import 'package:boilerplate/presentation/user/user_list.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,7 @@ class SecondScreenState extends State<SecondScreen> {
   //stores:---------------------------------------------------------------------
   final ThemeStore _themeStore = getIt<ThemeStore>();
   final LanguageStore _languageStore = getIt<LanguageStore>();
+  final UserStore _userStore = getIt<UserStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +35,24 @@ class SecondScreenState extends State<SecondScreen> {
   Widget _buildBody() {
     return Column(
       children: <Widget>[
+        Text(
+          _userStore.userLogin != null
+              ? "UserLogin ${_userStore.userLogin?.firstName}"
+              : "Logged User: None",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          _userStore.userList != null
+              ? "UserSelected: ${_userStore.userSelected?.firstName} ${_userStore.userSelected?.lastName}"
+              : "Selected User: None",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         Expanded(
           child: _buildChooseUserButton(),
         ),
@@ -43,7 +64,17 @@ class SecondScreenState extends State<SecondScreen> {
     return Center(
       child: ElevatedButton(
         onPressed: () {
-          Navigator.of(context).pushNamed(Routes.third);
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => UserListScreen(
+                onUserSelected: (selectedUser) {
+                  setState(() {
+                    _userStore.userSelected = selectedUser;
+                  });
+                },
+              ),
+            ),
+          );
         },
         child: Text(
           "Choose a User",

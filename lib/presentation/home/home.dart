@@ -1,3 +1,6 @@
+import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/domain/entity/user/user.dart';
+import 'package:boilerplate/presentation/user/store/user_store.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +12,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _palindromeController = TextEditingController();
+
+  final UserStore _userStore = getIt<UserStore>(); 
 
   @override
   Widget build(BuildContext context) {
@@ -130,6 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       onPressed: () {
         // Implement next button logic here
+        _userStore.userLogin = User(firstName: _nameController.text);
         Navigator.of(context).pushNamed(Routes.second);
       },
     );
@@ -138,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isPalindrome(String text) {
     String cleanedText = text.replaceAll(RegExp(r'[^A-Za-z0-9]'), '').toLowerCase();
     String reversedText = cleanedText.split('').reversed.join('');
-    return cleanedText == reversedText;
+    return cleanedText == '' ? false : cleanedText == reversedText;
   }
 
   void _showPalindromeResult(BuildContext context) {

@@ -25,7 +25,7 @@ class _HomeOriScreenState extends State<HomeOriScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      body: UserListScreen(),
+      body: UserListScreen(onUserSelected: (User ) {  },),
     );
   }
 

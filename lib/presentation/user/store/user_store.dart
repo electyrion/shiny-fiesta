@@ -36,7 +36,10 @@ abstract class _UserStore with Store {
   bool isUserListEmpty = false;
 
   @observable
-  User? user;
+  User? userLogin;
+
+  @observable
+  User? userSelected;
 
   @observable
   bool success = false;
